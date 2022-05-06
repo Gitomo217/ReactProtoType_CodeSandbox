@@ -46,9 +46,15 @@ export const App = () => {
           placeholder="入力エリア"
           value={inputText}
           onChange={onChangeTodoText}
+          disabled={incompleteTodo.length >= 5}
         />
         <button onClick={onClickAdd}>追加</button>
       </div>
+      {incompleteTodo.length >= 5 && (
+        <p style={{ color: "red" }}>
+          タスクを５つ以上追加することはできません。
+        </p>
+      )}
       <div className="incomplete-area">
         <p className="tytle">未完了のタスク</p>
         <ul>
