@@ -4,9 +4,9 @@ import "./styles.css";
 export const App = () => {
   const [inputText, setInputText] = useState("");
 
-  const [incompleteTodo, setIncompleteTodo] = useState(["あああ", "いいい"]);
+  const [incompleteTodo, setIncompleteTodo] = useState([]);
 
-  const [completeTodo, setcompleteTodo] = useState(["ううう"]);
+  const [completeTodo, setcompleteTodo] = useState([]);
 
   const onChangeTodoText = (event) => setInputText(event.target.value);
 
@@ -15,6 +15,28 @@ export const App = () => {
     const newTodo = [...incompleteTodo, inputText];
     setIncompleteTodo(newTodo);
     setInputText("");
+  };
+
+  const onClickDelete = (index) => {
+    const targetTodo = [...incompleteTodo];
+    targetTodo.splice(index, 1);
+    setIncompleteTodo(targetTodo);
+  };
+
+  const onClickComplete = (index) => {
+    const newIncompleteTodo = [...incompleteTodo];
+    newIncompleteTodo.splice(index, 1);
+    const newCompleteTodo = [...completeTodo, incompleteTodo[index]];
+    setcompleteTodo(newCompleteTodo);
+    setIncompleteTodo(newIncompleteTodo);
+  };
+
+  const onClickBack = (index) => {
+    const newCompleteTodo = [...completeTodo];
+    newCompleteTodo.splice(index, 1);
+    const newIncompleteTodo = [...incompleteTodo, completeTodo[index]];
+    setcompleteTodo(newCompleteTodo);
+    setIncompleteTodo(newIncompleteTodo);
   };
 
   return (
@@ -30,12 +52,12 @@ export const App = () => {
       <div className="incomplete-area">
         <p className="tytle">未完了のタスク</p>
         <ul>
-          {incompleteTodo.map((todo) => {
+          {incompleteTodo.map((todo, index) => {
             return (
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>完了</button>
-                <button>削除</button>
+                <button onClick={() => onClickComplete(index)}>完了</button>
+                <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
             );
           })}
@@ -44,11 +66,11 @@ export const App = () => {
       <div className="complete-area">
         <p className="tytle">完了済タスク</p>
         <ul>
-          {completeTodo.map((todo) => {
+          {completeTodo.map((todo, index) => {
             return (
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button onClick={() => onClickBack(index)}>戻す</button>
               </div>
             );
           })}
